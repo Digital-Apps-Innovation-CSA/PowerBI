@@ -45,7 +45,6 @@ jobs:
               
               $itemsFolders = Get-ChildItem  -Path $path -recurse -include ("*.pbidataset", "*.pbism")
 
-              echo "summary" >> $ENV:GITHUB_STEP_SUMMARY
               echo "## Dataset Rules" >> $ENV:GITHUB_STEP_SUMMARY
               echo "<details><summary>Click to expand</summary>" >> $ENV:GITHUB_STEP_SUMMARY
               echo "" >> $ENV:GITHUB_STEP_SUMMARY
@@ -111,11 +110,22 @@ jobs:
                  $rulesPath = "$tempPath\Rules-Report.json"
               }
               $itemsFolders = Get-ChildItem  -Path $path -recurse -include *.pbir
+
+              echo "## Reports Rules" >> $ENV:GITHUB_STEP_SUMMARY
+              echo "<details><summary>Click to expand</summary>" >> $ENV:GITHUB_STEP_SUMMARY
+              echo "" >> $ENV:GITHUB_STEP_SUMMARY
+              echo '```reports' >> $ENV:GITHUB_STEP_SUMMARY
+
+
               foreach($itemFolder in $itemsFolders)
               {	
+                $outputFile = "$tempPath\output.log"
+                $outputFileError = "$tempPath\outputerror.log"
                 $itemPath = $itemFolder.Directory.FullName
-                Write-Host "##[group]Running rules for: '$itemPath'"
-                Start-Process -FilePath "$toolPath" -ArgumentList "-pbipreport ""$itemPath"" -rules ""$rulesPath"" -formats ""ADO""" -NoNewWindow -Wait
-                Write-Host "##[endgroup]"
+                echo "##[group]Running rules for: '$itemPath'" >> $ENV:GITHUB_STEP_SUMMARY
+                Start-Process -FilePath "$toolPath" -ArgumentList "-pbipreport ""$itemPath"" -rules ""$rulesPath"" -formats ""ADO""" -NoNewWindow -Wait  -RedirectStandardOutput $outputFile -RedirectStandardError $outputFileError
+                $outputContent = Get-Content $outputFile
+                echo $outputContent >> $ENV:GITHUB_STEP_SUMMARY
+                echo "##[endgroup]" >> $ENV:GITHUB_STEP_SUMMARY
               }     
       shell: pwsh
