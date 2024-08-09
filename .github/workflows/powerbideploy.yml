@@ -35,7 +35,6 @@ jobs:
       continue-on-error: false
 
     - name: Check for errors
-      if: steps.deploy_powerbi.outputs.error_message != ''
       run: |
-        echo "Error during deployment: ${{ env.error_message }}"
+        echo "Error during deployment: ${{ steps.deploy_powerbi.outputs.error_message}}"
         exit 1
