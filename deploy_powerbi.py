@@ -7,7 +7,7 @@ TENANT_ID = os.getenv('POWERBI_TENANT_ID')
 CLIENT_ID = os.getenv('POWERBI_CLIENT_ID')
 CLIENT_SECRET = os.getenv('POWERBI_CLIENT_SECRET')
 WORKSPACE_ID = 123 #os.getenv('POWERBI_WORKSPACE_ID')
-PBIX_FILE_PATH = 'HumanResources\HumanResourcesSamplePBIX.pbix'
+PBIX_FILE_PATH = './HumanResources/HumanResourcesSamplePBIX.pbix'
 GROUP_ID = WORKSPACE_ID
 
 # Function to get access token
