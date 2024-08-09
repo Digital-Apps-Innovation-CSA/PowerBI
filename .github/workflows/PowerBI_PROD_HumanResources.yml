@@ -1,0 +1,17 @@
+name: POWERBI DEV HUMAN RESOURCES
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+    paths:
+      - HumanResources/**
+      
+jobs:
+  Deploy-PowerBI:
+    uses: ./.github/workflows/PowerBI_DeploymentTemplate.yml
+    with:
+      REPORT_NAME: HumanResourcesSample
+      PBIX_FILE_PATH: ./HumanResources/HumanResourcesSamplePBIX.pbix
+      POWERBI_ENVIRONMENT: prod
+    secrets: inherit

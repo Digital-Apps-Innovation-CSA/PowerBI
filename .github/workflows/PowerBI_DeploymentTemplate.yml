@@ -1,14 +1,21 @@
 name: Deploy Power BI
 
 on:
-  push:
-    branches:
-      - main
-
+    workflow_call:
+      inputs:
+        REPORT_NAME:
+          required: true
+          type: string
+        PBIX_FILE_PATH:
+          required: true
+          type: string      
+        POWERBI_ENVIRONMENT:
+          required: true
+          type: string
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
+    #environment: ${{ inputs.POWERBI_ENVIRONMENT }}
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
@@ -30,6 +37,8 @@ jobs:
         POWERBI_CLIENT_SECRET: ${{ secrets.POWERBI_CLIENT_SECRET }}
         POWERBI_TENANT_ID: ${{ secrets.POWERBI_TENANT_ID }}
         POWERBI_WORKSPACE_ID: ${{ secrets.POWERBI_WORKSPACE_ID }}
+        REPORT_NAME: ${{ inputs.REPORT_NAME }}
+        PBIX_FILE_PATH : ${{ inputs.PBIX_FILE_PATH }}
       run: |
         echo "error_message=$(python deploy_powerbi.py)" >> $GITHUB_OUTPUT
       continue-on-error: false

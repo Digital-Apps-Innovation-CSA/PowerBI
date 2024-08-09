@@ -6,8 +6,9 @@ from msal import ConfidentialClientApplication
 TENANT_ID = os.getenv('POWERBI_TENANT_ID')
 CLIENT_ID = os.getenv('POWERBI_CLIENT_ID')
 CLIENT_SECRET = os.getenv('POWERBI_CLIENT_SECRET')
-WORKSPACE_ID = 'dsadsa'#os.getenv('POWERBI_WORKSPACE_ID')
-PBIX_FILE_PATH = './HumanResources/HumanResourcesSamplePBIX.pbix'
+WORKSPACE_ID = os.getenv('POWERBI_WORKSPACE_ID')
+PBIX_FILE_PATH = os.getenv('PBIX_FILE_PATH') 
+REPORT_NAME = os.getenv('REPORT_NAME')
 GROUP_ID = WORKSPACE_ID
 
 # Function to get access token
@@ -27,7 +28,7 @@ def get_access_token():
 
 # Function to upload .pbix file
 def upload_pbix_file(access_token):
-    url = f'https://api.powerbi.com/v1.0/myorg/groups/{GROUP_ID}/imports?datasetDisplayName=MyDataset'
+    url = f'https://api.powerbi.com/v1.0/myorg/groups/{GROUP_ID}/imports?datasetDisplayName={REPORT_NAME}'
     headers = {
         'Authorization': f'Bearer {access_token}'
     }
