@@ -24,6 +24,7 @@ jobs:
         pip install requests msal
 
     - name: Deploy Power BI .pbix file
+      id: deploy_powerbi
       env:
         POWERBI_CLIENT_ID: ${{ secrets.POWERBI_CLIENT_ID }}
         POWERBI_CLIENT_SECRET: ${{ secrets.POWERBI_CLIENT_SECRET }}
@@ -31,10 +32,10 @@ jobs:
         POWERBI_WORKSPACE_ID: ${{ secrets.POWERBI_WORKSPACE_ID }}
       run: |
         python deploy_powerbi.py || echo "error_message=$(error.log)" >> $GITHUB_ENV
-      continue-on-error: true
+      continue-on-error: false
 
     - name: Check for errors
-      if: env.error_message
+      if: steps.deploy_powerbi.outputs.error_message != ''
       run: |
         echo "Error during deployment: ${{ env.error_message }}"
         exit 1
