@@ -56,7 +56,7 @@ jobs:
                       }
                   }
                   echo "##[group]Running rules for: '$itemPath'" >> $ENV:GITHUB_STEP_SUMMARY 
-                  Start-Process -FilePath "$toolPath" -ArgumentList """$itemPath"" -A ""$rulesPath"" -V" -NoNewWindow -Wait
+                  echo Start-Process -FilePath "$toolPath" -ArgumentList """$itemPath"" -A ""$rulesPath"" -V" -NoNewWindow -Wait >> $ENV:GITHUB_STEP_SUMMARY 
                   echo "##[endgroup]" >> $ENV:GITHUB_STEP_SUMMARY 
               
               
