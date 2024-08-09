@@ -1,4 +1,4 @@
-name: Deploy PBIX
+name: Deploy Power BI
 
 on:
   push:
@@ -6,26 +6,28 @@ on:
       - main
 
 jobs:
-  deploy-pbix:
+  deploy:
     runs-on: ubuntu-latest
-    env:
-        POWERBI_CLIENT_ID: ${{ secrets.POWERBI_CLIENT_ID }}
-        POWERBI_CLIENT_SECRET: ${{ secrets.POWERBI_CLIENT_SECRET }}
-        POWERBI_TENANT_ID: ${{ secrets.POWERBI_TENANT_ID }}
+
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    - name: Set up .NET Core
-      uses: actions/setup-dotnet@v1
+    - name: Set up Python
+      uses: actions/setup-python@v2
       with:
-        dotnet-version: '3.1.x'
+        python-version: '3.x'
 
-    - name: Install Power BI Action
-      run: dotnet tool install --global PowerBiActions
-
-    - name: Deploy PBIX to Power BI
+    - name: Install dependencies
       run: |
-        export PATH="$PATH:/home/runner/.dotnet/tools"
-        PowerBiActions publish --workspace-id 5224ad61-698d-48de-aa30-1f7d8a8b8227 --file-path ./HumanResources --name HumanResourcesSamplePBIX.pbix
-     
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Deploy Power BI .pbix file
+      env:
+        POWERBI_CLIENT_ID: ${{ secrets.POWERBI_CLIENT_ID }}
+        POWERBI_CLIENT_SECRET: ${{ secrets.POWERBI_CLIENT_SECRET }}
+        POWERBI_TENANT_ID: ${{ secrets.POWERBI_TENANT_ID }}
+        POWERBI_WORKSPACE_ID: ${{ secrets.POWERBI_WORKSPACE_ID }}
+      run: |
+        python deploy_powerbi.py
