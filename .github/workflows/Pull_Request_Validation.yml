@@ -39,7 +39,7 @@ jobs:
               $rulesPath = "$path\Rules-Dataset.json"
               if (!(Test-Path $rulesPath))
               {
-                  Write-Host "Running downloaded rules"
+                  echo "Running downloaded rules" >> $ENV:GITHUB_STEP_SUMMARY 
                   $rulesPath = "$tempPath\Rules-Dataset.json"
               }
               $itemsFolders = Get-ChildItem  -Path $path -recurse -include ("*.pbidataset", "*.pbism")
@@ -55,28 +55,14 @@ jobs:
                           throw "Cannot find semantic model definition."
                       }
                   }
-                  Write-Host "##[group]Running rules for: '$itemPath'"
-                  $TERRAFORM_PLAN = $(Start-Process -FilePath "$toolPath" -ArgumentList """$itemPath"" -A ""$rulesPath"" -V" -NoNewWindow -Wait)
-                  Write-Host "##[endgroup]"
-                  $delimiter = "--------"
-                  echo "summary<<${delimiter}" >> $ENV:GITHUB_OUTPUT
-                  echo "## Terraform Plan Output" >> $ENV:GITHUB_OUTPUT
-                  echo "<details><summary>Click to expand</summary>" >> $ENV:GITHUB_OUTPUT
-                  echo "" >> $GITHUB_OUTPUT
-                  echo '```terraform' >> $ENV:GITHUB_OUTPUT
-                  echo "$TERRAFORM_PLAN" >> $ENV:GITHUB_OUTPUT
-                  echo '```' >> $ENV:GITHUB_OUTPUT
-                  echo "</details>" >> $ENV:GITHUB_OUTPUT
-                  echo "${delimiter}" >> $ENV:GITHUB_OUTPUT
-
+                  echo "##[group]Running rules for: '$itemPath'" >> $ENV:GITHUB_STEP_SUMMARY 
+                  Start-Process -FilePath "$toolPath" -ArgumentList """$itemPath"" -A ""$rulesPath"" -V" -NoNewWindow -Wait
+                  echo "##[endgroup]" >> $ENV:GITHUB_STEP_SUMMARY 
+              
+              
               }
       shell: pwsh   
-    - name: Publish Terraform Plan to Task Summary
-      env:
-        SUMMARY: ${{ steps.tf-plan-string.outputs.summary }}
-      run: |
-        echo "$SUMMARY" >> $ENV:GITHUB_STEP_SUMMARY 
-  
+
   Build_Reports:
     runs-on: windows-latest
     steps:
