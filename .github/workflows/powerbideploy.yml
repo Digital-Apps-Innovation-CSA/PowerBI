@@ -1,7 +1,6 @@
 name: Deploy Power BI
 
 on:
-  workflow_dispatch:
   push:
     branches:
       - main
@@ -31,4 +30,11 @@ jobs:
         POWERBI_TENANT_ID: ${{ secrets.POWERBI_TENANT_ID }}
         POWERBI_WORKSPACE_ID: ${{ secrets.POWERBI_WORKSPACE_ID }}
       run: |
-        python deploy_powerbi.py
+        python deploy_powerbi.py || echo "error_message=$(<error.log)" >> $GITHUB_ENV
+      continue-on-error: true
+
+    - name: Check for errors
+      if: env.error_message
+      run: |
+        echo "Error during deployment: ${{ env.error_message }}"
+        exit 1
