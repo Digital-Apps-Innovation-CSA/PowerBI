@@ -59,15 +59,15 @@ jobs:
                   $TERRAFORM_PLAN = $(Start-Process -FilePath "$toolPath" -ArgumentList """$itemPath"" -A ""$rulesPath"" -V" -NoNewWindow -Wait)
                   Write-Host "##[endgroup]"
                   $delimiter = "--------"
-                  echo "summary<<${delimiter}" >> $GITHUB_OUTPUT
-                  echo "## Terraform Plan Output" >> $GITHUB_OUTPUT
-                  echo "<details><summary>Click to expand</summary>" >> $GITHUB_OUTPUT
+                  echo "summary<<${delimiter}" >> $ENV:GITHUB_OUTPUT
+                  echo "## Terraform Plan Output" >> $ENV:GITHUB_OUTPUT
+                  echo "<details><summary>Click to expand</summary>" >> $ENV:GITHUB_OUTPUT
                   echo "" >> $GITHUB_OUTPUT
-                  echo '```terraform' >> $GITHUB_OUTPUT
-                  echo "$TERRAFORM_PLAN" >> $GITHUB_OUTPUT
-                  echo '```' >> $GITHUB_OUTPUT
-                  echo "</details>" >> $GITHUB_OUTPUT
-                  echo "${delimiter}" >> $GITHUB_OUTPUT
+                  echo '```terraform' >> $ENV:GITHUB_OUTPUT
+                  echo "$TERRAFORM_PLAN" >> $ENV:GITHUB_OUTPUT
+                  echo '```' >> $ENV:GITHUB_OUTPUT
+                  echo "</details>" >> $ENV:GITHUB_OUTPUT
+                  echo "${delimiter}" >> $ENV:GITHUB_OUTPUT
 
               }
       shell: pwsh   
