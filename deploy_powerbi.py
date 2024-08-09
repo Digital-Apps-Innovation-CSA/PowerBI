@@ -40,10 +40,5 @@ def upload_pbix_file(access_token):
     else:
         print(f'Failed to upload file: {response.content}')
 
-# Main deployment process
-if __name__ == '__main__':
-    try:
-        token = get_access_token()
-        upload_pbix_file(token)
-    except Exception as e:
-        print(f'Error: {e}')
+token = get_access_token()
+upload_pbix_file(token)
