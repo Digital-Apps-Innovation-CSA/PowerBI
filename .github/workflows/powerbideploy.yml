@@ -30,7 +30,7 @@ jobs:
         POWERBI_TENANT_ID: ${{ secrets.POWERBI_TENANT_ID }}
         POWERBI_WORKSPACE_ID: ${{ secrets.POWERBI_WORKSPACE_ID }}
       run: |
-        python deploy_powerbi.py || echo "error_message=$(<error.log)" >> $GITHUB_ENV
+        python deploy_powerbi.py || echo "error_message=$(error.log)" >> $GITHUB_ENV
       continue-on-error: true
 
     - name: Check for errors
