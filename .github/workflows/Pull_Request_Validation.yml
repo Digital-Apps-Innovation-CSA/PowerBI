@@ -75,7 +75,7 @@ jobs:
       env:
         SUMMARY: ${{ steps.tf-plan-string.outputs.summary }}
       run: |
-        echo "$SUMMARY" >> $GITHUB_STEP_SUMMARY 
+        echo "$SUMMARY" >> $ENV:GITHUB_STEP_SUMMARY 
   
   Build_Reports:
     runs-on: windows-latest

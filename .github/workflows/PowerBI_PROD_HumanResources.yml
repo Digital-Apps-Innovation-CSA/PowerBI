@@ -3,7 +3,7 @@ name: POWERBI PROD HUMAN RESOURCES
 on:
   workflow_dispatch:
   push:
-    branches: [ main ]
+    branches: [ qa ]
     #paths:
     #  - HumanResources/**
       

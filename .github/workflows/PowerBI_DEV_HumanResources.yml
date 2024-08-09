@@ -3,7 +3,7 @@ name: POWERBI DEV HUMAN RESOURCES
 on:
   workflow_dispatch:
   push:
-    branches: [ dev ]
+    branches: [ qa ]
     #paths:
     #  - HumanResources/**
       
