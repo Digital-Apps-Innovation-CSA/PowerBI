@@ -58,7 +58,7 @@ jobs:
                   Write-Host "##[group]Running rules for: '$itemPath'"
                   $TERRAFORM_PLAN = $(Start-Process -FilePath "$toolPath" -ArgumentList """$itemPath"" -A ""$rulesPath"" -V" -NoNewWindow -Wait)
                   Write-Host "##[endgroup]"
-                  delimiter="$(openssl rand -hex 8)"
+                  $delimiter = "--------"
                   echo "summary<<${delimiter}" >> $GITHUB_OUTPUT
                   echo "## Terraform Plan Output" >> $GITHUB_OUTPUT
                   echo "<details><summary>Click to expand</summary>" >> $GITHUB_OUTPUT
