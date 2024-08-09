@@ -1,0 +1,31 @@
+name: Deploy PBIX
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy-pbix:
+    runs-on: ubuntu-latest
+    env:
+        POWERBI_CLIENT_ID: ${{ secrets.POWERBI_CLIENT_ID }}
+        POWERBI_CLIENT_SECRET: ${{ secrets.POWERBI_CLIENT_SECRET }}
+        POWERBI_TENANT_ID: ${{ secrets.POWERBI_TENANT_ID }}
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '3.1.x'
+
+    - name: Install Power BI Action
+      run: dotnet tool install --global PowerBiActions
+
+    - name: Deploy PBIX to Power BI
+      run: |
+        export PATH="$PATH:/home/runner/.dotnet/tools"
+        PowerBiActions publish --workspace-id 5224ad61-698d-48de-aa30-1f7d8a8b8227 --file-path ./HumanResources --name HumanResourcesSamplePBIX.pbix
+     
