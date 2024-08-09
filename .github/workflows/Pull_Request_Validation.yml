@@ -4,7 +4,7 @@ on:
     branches: [ main ]
 
 jobs:
-  build_datasets:
+  Build_Datasets:
     runs-on: windows-latest
 
     steps:
@@ -31,6 +31,7 @@ jobs:
       shell: pwsh
 
     - name: Run Dataset Rules
+      id: tf-plan-string
       run: |
               $path = "./SalesReturns"
               $tempPath = "$path\_temp"
@@ -55,10 +56,27 @@ jobs:
                       }
                   }
                   Write-Host "##[group]Running rules for: '$itemPath'"
-                  Start-Process -FilePath "$toolPath" -ArgumentList """$itemPath"" -A ""$rulesPath"" -V" -NoNewWindow -Wait
+                  $TERRAFORM_PLAN = $(Start-Process -FilePath "$toolPath" -ArgumentList """$itemPath"" -A ""$rulesPath"" -V" -NoNewWindow -Wait)
                   Write-Host "##[endgroup]"
+                  delimiter="$(openssl rand -hex 8)"
+                  echo "summary<<${delimiter}" >> $GITHUB_OUTPUT
+                  echo "## Terraform Plan Output" >> $GITHUB_OUTPUT
+                  echo "<details><summary>Click to expand</summary>" >> $GITHUB_OUTPUT
+                  echo "" >> $GITHUB_OUTPUT
+                  echo '```terraform' >> $GITHUB_OUTPUT
+                  echo "$TERRAFORM_PLAN" >> $GITHUB_OUTPUT
+                  echo '```' >> $GITHUB_OUTPUT
+                  echo "</details>" >> $GITHUB_OUTPUT
+                  echo "${delimiter}" >> $GITHUB_OUTPUT
+
               }
-      shell: pwsh    
+      shell: pwsh   
+    - name: Publish Terraform Plan to Task Summary
+      env:
+        SUMMARY: ${{ steps.tf-plan-string.outputs.summary }}
+      run: |
+        echo "$SUMMARY" >> $GITHUB_STEP_SUMMARY 
+  
   Build_Reports:
     runs-on: windows-latest
     steps:
