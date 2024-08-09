@@ -1,11 +1,11 @@
-name: POWERBI DEV HUMAN RESOURCES
+name: POWERBI PROD HUMAN RESOURCES
 
 on:
   workflow_dispatch:
   push:
     branches: [ main ]
-    paths:
-      - HumanResources/**
+    #paths:
+    #  - HumanResources/**
       
 jobs:
   Deploy-PowerBI:
