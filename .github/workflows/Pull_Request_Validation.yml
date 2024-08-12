@@ -1,3 +1,5 @@
+name: POWERBI VALIDATOR
+
 on:
   workflow_dispatch:
   push:
